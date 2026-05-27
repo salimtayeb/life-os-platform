@@ -33,6 +33,9 @@ jobs:
 
       - uses: android-actions/setup-android@v3
 
+      - name: Fix platform-specific deps
+        run: sed -i '/lightningcss-win32/d' package.json
+
       - run: npm ci
 
       - run: npm run build
