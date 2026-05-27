@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends jq && rm -rf /v
 
 RUN npm ci
 
-COPY frontend/tsconfig.json frontend/next.config.ts frontend/postcss.config.mjs frontend/next-env.d.ts ./
+COPY frontend/tsconfig.json frontend/next.config.ts frontend/postcss.config.mjs frontend/next-env.d.ts frontend/.env.production ./
 COPY frontend/src/ ./src/
 COPY frontend/capacitor.config.ts ./
 COPY frontend/android/ ./android/

@@ -36,11 +36,21 @@ jobs:
       - name: Fix platform-specific deps
         run: sed -i '/lightningcss-win32/d' package.json
 
-      - run: npm ci
+      - name: Override API URL from secret (if set)
+        run: |
+          echo "NEXT_PUBLIC_API_URL=${API_URL:-$(grep NEXT_PUBLIC_API_URL .env.production | cut -d= -f2-)}" > .env.production
+          echo "NEXT_PUBLIC_API_PORT=5001" >> .env.production
+        env:
+          API_URL: ${{ secrets.API_URL }}
 
-      - run: npm run build
+      - name: Install dependencies
+        run: npm ci
 
-      - run: npx cap sync
+      - name: Build Next.js static export
+        run: npm run build
+
+      - name: Sync Capacitor Android project
+        run: npx cap sync
 
       - name: Make gradlew executable
         run: chmod +x gradlew

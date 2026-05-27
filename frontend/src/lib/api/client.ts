@@ -6,7 +6,7 @@ function getApiUrl(): string {
     const port = process.env.NEXT_PUBLIC_API_PORT || "5001";
     return `http://${window.location.hostname}:${port}/api`;
   }
-  return process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api";
+  return process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5001/api";
 }
 
 const API_URL = getApiUrl();

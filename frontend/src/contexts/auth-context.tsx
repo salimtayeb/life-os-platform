@@ -191,5 +191,11 @@ export function getAuthErrorMessage(error: unknown): string {
   if (error instanceof ApiClientError) {
     return error.message;
   }
-  return "Une erreur inattendue est survenue";
+  if (
+    error instanceof TypeError &&
+    error.message === "Failed to fetch"
+  ) {
+    return "Impossible de contacter le serveur. Vérifiez votre connexion réseau.";
+  }
+  return "Une erreur inattendue est survenue. Veuillez réessayer.";
 }
