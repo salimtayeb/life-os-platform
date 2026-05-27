@@ -4,6 +4,11 @@ on:
   push:
     branches: [main, develop]
   workflow_dispatch:
+    inputs:
+      api_url:
+        description: "URL de l'API (ex: https://ton-serveur.com/api)"
+        required: false
+        type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -36,12 +41,15 @@ jobs:
       - name: Fix platform-specific deps
         run: sed -i '/lightningcss-win32/d' package.json
 
-      - name: Override API URL from secret (if set)
+      - name: Configure API URL
         run: |
-          echo "NEXT_PUBLIC_API_URL=${API_URL:-$(grep NEXT_PUBLIC_API_URL .env.production | cut -d= -f2-)}" > .env.production
+          URL="${API_URL:-${SECRET_URL:-$(grep NEXT_PUBLIC_API_URL .env.production | cut -d= -f2-)}}"
+          echo "Using API URL: $URL"
+          echo "NEXT_PUBLIC_API_URL=$URL" > .env.production
           echo "NEXT_PUBLIC_API_PORT=5001" >> .env.production
         env:
-          API_URL: ${{ secrets.API_URL }}
+          API_URL: ${{ inputs.api_url || '' }}
+          SECRET_URL: ${{ secrets.API_URL || '' }}
 
       - name: Install dependencies
         run: npm ci
