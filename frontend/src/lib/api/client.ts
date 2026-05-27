@@ -1,14 +1,25 @@
 import { getToken } from "@/lib/auth/storage";
 import type { ApiError } from "@/types/api";
 
+function isCapacitorNative(): boolean {
+  try {
+    return !!(window as typeof window & { Capacitor?: { isNativePlatform: () => boolean } }).Capacitor?.isNativePlatform();
+  } catch {
+    return false;
+  }
+}
+
 function getApiUrl(): string {
   if (typeof window !== "undefined") {
+    if (isCapacitorNative()) {
+      return process.env.NEXT_PUBLIC_API_URL || "http://10.25.128.119:3001/api";
+    }
     if (window.location.protocol === "http:" || window.location.protocol === "https:") {
       return `${window.location.origin}/api`;
     }
-    return process.env.NEXT_PUBLIC_API_URL || "http://10.25.128.119:5001/api";
+    return process.env.NEXT_PUBLIC_API_URL || "http://10.25.128.119:3001/api";
   }
-  return process.env.NEXT_PUBLIC_API_URL || "http://10.25.128.119:5001/api";
+  return process.env.NEXT_PUBLIC_API_URL || "http://10.25.128.119:3001/api";
 }
 
 const API_URL = getApiUrl();
