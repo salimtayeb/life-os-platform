@@ -1,7 +1,15 @@
 import { getToken } from "@/lib/auth/storage";
 import type { ApiError } from "@/types/api";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api";
+function getApiUrl(): string {
+  if (typeof window !== "undefined") {
+    const port = process.env.NEXT_PUBLIC_API_PORT || "5001";
+    return `http://${window.location.hostname}:${port}/api`;
+  }
+  return process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api";
+}
+
+const API_URL = getApiUrl();
 
 export class ApiClientError extends Error {
   status: number;

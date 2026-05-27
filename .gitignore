@@ -141,3 +141,11 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Android build output
+generated/
+apk-output/
+
+# Android keystore (sensitive)
+frontend/android/keystore/
+frontend/android/keystore.properties

@@ -1,0 +1,8 @@
+services:
+  android-builder:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: artifact
+    volumes:
+      - ./generated:/generated

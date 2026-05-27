@@ -23,12 +23,25 @@ const PORT = process.env.PORT || 5000
 app.use(helmet())
 
 // Cors autorise le frontend à communiquer avec ce backend
+const allowedOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(',')
+  : [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://life-os-platform.vercel.app',
+    ]
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'https://life-os-platform.vercel.app'
-  ],
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true)
+    const isLocal = origin.startsWith('http://localhost') ||
+      origin.startsWith('https://localhost')
+    const isPrivateNetwork = /^https?:\/\/(10\.|192\.168\.|172\.(1[6-9]|2\d|3[01]))/.test(origin)
+    if (isLocal || isPrivateNetwork || allowedOrigins.some(o => origin.startsWith(o))) {
+      return callback(null, true)
+    }
+    callback(new Error(`Origine non autorisée : ${origin}`))
+  },
   credentials: true
 }))
 

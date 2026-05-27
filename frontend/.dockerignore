@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+android/app/build/
+android/.gradle/
+.git/
+*.md
+.env
+!.env.production
+.eslintcache
