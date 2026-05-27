@@ -3,10 +3,12 @@ import type { ApiError } from "@/types/api";
 
 function getApiUrl(): string {
   if (typeof window !== "undefined") {
-    const port = process.env.NEXT_PUBLIC_API_PORT || "5001";
-    return `http://${window.location.hostname}:${port}/api`;
+    if (window.location.protocol === "http:" || window.location.protocol === "https:") {
+      return `${window.location.origin}/api`;
+    }
+    return process.env.NEXT_PUBLIC_API_URL || "http://10.25.128.119:5001/api";
   }
-  return process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5001/api";
+  return process.env.NEXT_PUBLIC_API_URL || "http://10.25.128.119:5001/api";
 }
 
 const API_URL = getApiUrl();

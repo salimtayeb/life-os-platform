@@ -46,7 +46,6 @@ jobs:
           URL="${API_URL:-${SECRET_URL:-$(grep NEXT_PUBLIC_API_URL .env.production | cut -d= -f2-)}}"
           echo "Using API URL: $URL"
           echo "NEXT_PUBLIC_API_URL=$URL" > .env.production
-          echo "NEXT_PUBLIC_API_PORT=5001" >> .env.production
         env:
           API_URL: ${{ inputs.api_url || '' }}
           SECRET_URL: ${{ secrets.API_URL || '' }}

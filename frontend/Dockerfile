@@ -9,6 +9,6 @@ COPY . .
 
 RUN npm run build
 
-RUN npm install -g serve
 EXPOSE 3000
-CMD ["serve", "out", "-l", "3000"]
+ENV API_TARGET=http://backend:5000
+CMD ["node", "server.js"]
